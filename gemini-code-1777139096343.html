@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Ֆինանսական Աուդիտ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --card: #1e1e1e;
+      --border: #2a2a2a;
+      --accent: #c8f060;
+      --accent2: #60d0f0;
+      --accent3: #f060a0;
+      --text: #e8e8e8;
+      --muted: #666;
+      --bot-bg: #1e1e1e;
+      --user-bg: #1a2a10;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans Armenian', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    header {
+      width: 100%;
+      max-width: 720px;
+      padding: 32px 24px 16px;
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+    }
+
+    .logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      border: 1px solid var(--accent);
+      padding: 4px 10px;
+      border-radius: 3px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    #chat-container {
+      width: 100%;
+      max-width: 720px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 0 24px;
+    }
+
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 8px 0 16px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .message {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      animation: fadeUp 0.3s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.bot { flex-direction: row; }
+    .message.user { flex-direction: row-reverse; }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .message.bot .avatar { background: #1a2a10; border: 1px solid var(--accent); }
+    .message.user .avatar { background: #101a2a; border: 1px solid var(--accent2); }
+
+    .bubble {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .message.bot .bubble {
+      background: var(--bot-bg);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 3px;
+      color: var(--text);
+    }
+
+    .message.user .bubble {
+      background: var(--user-bg);
+      border: 1px solid #2a3a1a;
+      border-bottom-right-radius: 3px;
+      color: var(--accent);
+      font-family: 'Space Mono', monospace;
+    }
+
+    .bubble h3 { font-size: 15px; margin-bottom: 10px; color: var(--accent); }
+    
+    .input-area {
+      width: 100%;
+      max-width: 720px;
+      padding: 16px 24px 32px;
+      display: flex;
+      gap: 10px;
+    }
+
+    #user-input {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px 16px;
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      outline: none;
+    }
+
+    #send-btn {
+      background: var(--accent);
+      color: #0d0d0d;
+      border: none;
+      border-radius: 10px;
+      padding: 13px 20px;
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      margin-right: 4px;
+    }
+    .tag-needs { background: #1a1a2a; color: var(--accent2); border: 1px solid var(--accent2); }
+    .tag-wants { background: #2a1a2a; color: var(--accent3); border: 1px solid var(--accent3); }
+    .tag-save  { background: #1a2a10; color: var(--accent);  border: 1px solid var(--accent); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div><div class="logo">50/30/20</div></div>
+  <div>
+    <h1>Ֆինանսական Աուդիտ</h1>
+    <div class="subtitle">// budget_analyzer_v1.0</div>
+  </div>
+</header>
+
+<div id="chat-container">
+  <div id="messages"></div>
+</div>
+
+<div class="input-area">
+  <input type="number" id="user-input" placeholder="Մուտքագրեք թիվը (֏)" />
+  <button id="send-btn">ՈՒՂԱՐԿ →</button>
+</div>
+
+<script>
+const fields = [
+    { key: 'salary', label: 'Եկամուտ', category: 'income', question: '👋 Բարև։ Սկսենք աուդիտը։<br><br>Որքա՞ն է ձեր <b>ամսական եկամուտը</b> (֏):' },
+    { key: 'debts', label: 'Պարտքեր', category: 'needs', question: '<span class="tag tag-needs">NEEDS</span> Որքա՞ն են ձեր <b>վարկերն ու պարտքերը</b> (֏):' },
+    { key: 'rent', label: 'Տուն/Կոմունալ', category: 'needs', question: '<span class="tag tag-needs">NEEDS</span> Տան <b>վարձ + կոմունալ</b> (֏):' },
+    { key: 'food', label: 'Սնունդ', category: 'needs', question: '<span class="tag tag-needs">NEEDS</span> Ամսական <b>սննդի ծախսերը</b> (֏):' },
+    { key: 'transport', label: 'Տրանսպորտ', category: 'needs', question: '<span class="tag tag-needs">NEEDS</span> <b>Տրանսպորտ</b> / վառելիք (֏):' },
+    { key: 'entertainment', label: 'Ժամանց', category: 'wants', question: '<span class="tag tag-wants">WANTS</span> <b>Ժամանց, սրճարան, հոբբի</b> (֏):' },
+    { key: 'shopping', label: 'Գնումներ', category: 'wants', question: '<span class="tag tag-wants">WANTS</span> <b>Գնումներ, հագուստ</b> (֏):' },
+    { key: 'savings', label: 'Խնայողություն', category: 'savings', question: '<span class="tag tag-save">SAVE</span> Այս ամիս <b>խնայված</b> գումար (֏):' }
+];
+
+let userData = {};
+let currentStep = 0;
+
+const messagesDiv = document.getElementById('messages');
+const userInput = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+
+function addMessage(text, isBot) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `message ${isBot ? 'bot' : 'user'}`;
+    const avatar = isBot ? '📊' : '👤';
+    msgDiv.innerHTML = `
+        ${isBot ? `<div class="avatar">${avatar}</div>` : ''}
+        <div class="bubble">${text}</div>
+        ${!isBot ? `<div class="avatar">${avatar}</div>` : ''}
+    `;
+    messagesDiv.appendChild(msgDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function processInput() {
+    const val = userInput.value.trim();
+    if (!val) return;
+
+    const num = parseFloat(val);
+    addMessage(`${num.toLocaleString()} ֏`, false);
+    userData[fields[currentStep].key] = num;
+    userInput.value = '';
+
+    currentStep++;
+    if (currentStep < fields.length) {
+        setTimeout(() => addMessage(fields[currentStep].question, true), 500);
+    } else {
+        setTimeout(finishCalculation, 500);
+    }
+}
+
+function finishCalculation() {
+    const salary = userData.salary || 1;
+    const needs = (userData.debts || 0) + (userData.rent || 0) + (userData.food || 0) + (userData.transport || 0);
+    const wants = (userData.entertainment || 0) + (userData.shopping || 0);
+    const savings = (userData.savings || 0);
+    
+    const pNeeds = (needs / salary) * 100;
+    const pWants = (wants / salary) * 100;
+    const pSavings = (savings / salary) * 100;
+    const balance = salary - (needs + wants + savings);
+
+    let result = `<h3>📊 Աուդիտի Արդյունքներ</h3>`;
+    result += `<b style="color:${pNeeds > 55 ? '#f060a0' : '#60d0f0'}">📍 Կարիքներ: ${pNeeds.toFixed(1)}%</b> (Թիրախ՝ 50%)<br>`;
+    result += `<b style="color:${pWants > 35 ? '#f060a0' : '#c8f060'}">📍 Ցանկություններ: ${pWants.toFixed(1)}%</b> (Թիրախ՝ 30%)<br>`;
+    result += `<b style="color:${pSavings < 20 ? '#f060a0' : '#c8f060'}">📍 Խնայողություն: ${pSavings.toFixed(1)}%</b> (Թիրախ՝ 20%)<br><br>`;
+    
+    result += balance >= 0 ? 
+        `💰 <b style="color:#c8f060">Մնացորդ՝ ${balance.toLocaleString()} ֏</b>` : 
+        `🔴 <b style="color:#f060a0">Պակասորդ՝ ${Math.abs(balance).toLocaleString()} ֏</b>`;
+
+    addMessage(result, true);
+    userInput.disabled = true;
+    sendBtn.disabled = true;
+    sendBtn.innerText = "✓";
+}
+
+sendBtn.addEventListener('click', processInput);
+userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') processInput(); });
+
+// Start
+addMessage(fields[0].question, true);
+</script>
+</body>
+</html>
